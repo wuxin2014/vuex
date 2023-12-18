@@ -23,6 +23,7 @@ export default {
     products: state => state.products.all
   }),
   methods: {
+    // mapActions(type, map)
     ...mapActions('cart', [
       'addProductToCart'
     ]),

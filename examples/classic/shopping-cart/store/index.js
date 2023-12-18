@@ -4,6 +4,7 @@ import products from './modules/products'
 
 const debug = process.env.NODE_ENV !== 'production'
 
+debugger
 export default createStore({
   modules: {
     cart,

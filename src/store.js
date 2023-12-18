@@ -35,7 +35,7 @@ export class Store {
     this._actionSubscribers = []
     this._mutations = Object.create(null)
     this._wrappedGetters = Object.create(null)
-    this._modules = new ModuleCollection(options)
+    this._modules = new ModuleCollection(options) // 模块收集器
     this._modulesNamespaceMap = Object.create(null)
     this._subscribers = []
     this._makeLocalGettersCache = Object.create(null)
@@ -47,6 +47,7 @@ export class Store {
 
     this._devtools = devtools
 
+    // 对commit函数、dispatch函数进行包装。包装一层是为了指定this始终为store实例。因为在 js 中，不管是有意或者无意，能够改变 this 指向的操作太多了，所以 vuex 考虑到了这一点。
     // bind commit and dispatch to self
     const store = this
     const { dispatch, commit } = this
@@ -71,7 +72,7 @@ export class Store {
     // (also registers _wrappedGetters as computed properties)
     resetStoreState(this, state)
 
-    // apply plugins
+    // apply plugins 插件的作用
     plugins.forEach(plugin => plugin(this))
   }
 
@@ -114,6 +115,7 @@ export class Store {
       }
       return
     }
+    // _withCommit的作用：为了保证state状态值，是通过调用commit函数来改变的(跟踪状态)，其他方式修改state的值会报错。
     this._withCommit(() => {
       entry.forEach(function commitIterator (handler) {
         handler(payload)
@@ -264,7 +266,7 @@ export class Store {
 
   _withCommit (fn) {
     const committing = this._committing
-    this._committing = true
+    this._committing = true // 注意this._committing的值
     fn()
     this._committing = committing
   }

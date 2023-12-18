@@ -7,6 +7,7 @@ import { isObject } from './util'
  * @param {Object}
  */
 export const mapState = normalizeNamespace((namespace, states) => {
+  debugger
   const res = {}
   if (__DEV__ && !isValidMap(states)) {
     console.error('[vuex] mapState: mapper parameter must be either an Array or an Object')
@@ -117,13 +118,14 @@ export const mapActions = normalizeNamespace((namespace, actions) => {
       }
       return typeof val === 'function'
         ? val.apply(this, [dispatch].concat(args))
-        : dispatch.apply(this.$store, [val].concat(args))
+        : dispatch.apply(this.$store, [val].concat(args)) // 第一个参数是type
     }
   })
   return res
 })
 
 /**
+ * 待看
  * Rebinding namespace param for mapXXX function in special scoped, and return them by simple object
  * @param {String} namespace
  * @return {Object}
@@ -167,7 +169,7 @@ function isValidMap (map) {
  */
 function normalizeNamespace (fn) {
   return (namespace, map) => {
-    if (typeof namespace !== 'string') {
+    if (typeof namespace !== 'string') { // 处理参数
       map = namespace
       namespace = ''
     } else if (namespace.charAt(namespace.length - 1) !== '/') {

@@ -21,9 +21,11 @@ import { currency } from '../currency'
 
 export default {
   computed: {
+    // mapState(map)
     ...mapState({
       checkoutStatus: state => state.cart.checkoutStatus
     }),
+    // mapGetters(type, map)
     ...mapGetters('cart', {
       products: 'cartProducts',
       total: 'cartTotalPrice'

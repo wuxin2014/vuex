@@ -86,6 +86,7 @@ export function resetStoreState (store, state, hot) {
   }
 }
 
+// 安装module
 export function installModule (store, rootState, path, module, hot) {
   const isRoot = !path.length
   const namespace = store._modules.getNamespace(path)
@@ -114,24 +115,24 @@ export function installModule (store, rootState, path, module, hot) {
     })
   }
 
-  const local = module.context = makeLocalContext(store, namespace, path)
-
+  const local = module.context = makeLocalContext(store, namespace, path) // module.context的赋值
+  // module的mutation处理
   module.forEachMutation((mutation, key) => {
     const namespacedType = namespace + key
     registerMutation(store, namespacedType, mutation, local)
   })
-
+  // module的actions处理
   module.forEachAction((action, key) => {
     const type = action.root ? key : namespace + key
     const handler = action.handler || action
     registerAction(store, type, handler, local)
   })
-
+  // module的getters处理
   module.forEachGetter((getter, key) => {
     const namespacedType = namespace + key
     registerGetter(store, namespacedType, getter, local)
   })
-
+  // module的嵌套modules处理
   module.forEachChild((child, key) => {
     installModule(store, rootState, path.concat(key), child, hot)
   })
@@ -268,7 +269,9 @@ function registerGetter (store, type, rawGetter, local) {
   }
 }
 
+// 严格模式下
 function enableStrictMode (store) {
+  // 监听store._state.data的变化
   watch(() => store._state.data, () => {
     if (__DEV__) {
       assert(store._committing, `do not mutate vuex store state outside mutation handlers.`)
