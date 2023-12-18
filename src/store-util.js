@@ -42,7 +42,7 @@ export function resetStoreState (store, state, hot) {
   // create a new effect scope and create computed object inside it to avoid
   // getters (computed) getting destroyed on component unmount.
   const scope = effectScope(true)
-
+  // 注意这个函数的执行，给state.getter赋值了，基于computed Api实现的
   scope.run(() => {
     forEachValue(wrappedGetters, (fn, key) => {
       // use computed to leverage its lazy-caching mechanism
@@ -56,7 +56,7 @@ export function resetStoreState (store, state, hot) {
       })
     })
   })
-
+  // 定义响应式状态数据
   store._state = reactive({
     data: state
   })
@@ -101,8 +101,9 @@ export function installModule (store, rootState, path, module, hot) {
 
   // set state
   if (!isRoot && !hot) {
-    const parentState = getNestedState(rootState, path.slice(0, -1))
+    const parentState = getNestedState(rootState, path.slice(0, -1)) // 获取parentState
     const moduleName = path[path.length - 1]
+    // 为什么要先触发一次
     store._withCommit(() => {
       if (__DEV__) {
         if (moduleName in parentState) {

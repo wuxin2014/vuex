@@ -7,7 +7,6 @@ import { isObject } from './util'
  * @param {Object}
  */
 export const mapState = normalizeNamespace((namespace, states) => {
-  debugger
   const res = {}
   if (__DEV__ && !isValidMap(states)) {
     console.error('[vuex] mapState: mapper parameter must be either an Array or an Object')
@@ -79,6 +78,7 @@ export const mapGetters = normalizeNamespace((namespace, getters) => {
     // The namespace has been mutated by normalizeNamespace
     val = namespace + val
     res[key] = function mappedGetter () {
+      debugger
       if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
         return
       }
@@ -86,7 +86,7 @@ export const mapGetters = normalizeNamespace((namespace, getters) => {
         console.error(`[vuex] unknown getter: ${val}`)
         return
       }
-      return this.$store.getters[val]
+      return this.$store.getters[val] // TODO 疑问点 getter在resetStoreState函数中赋值的
     }
     // mark vuex getter for devtools
     res[key].vuex = true

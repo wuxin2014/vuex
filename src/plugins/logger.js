@@ -21,6 +21,7 @@ export function createLogger ({
     }
 
     if (logMutations) {
+      // 订阅事件
       store.subscribe((mutation, state) => {
         const nextState = deepCopy(state)
 
@@ -41,6 +42,7 @@ export function createLogger ({
     }
 
     if (logActions) {
+      // 订阅事件
       store.subscribeAction((action, state) => {
         if (actionFilter(action, state)) {
           const formattedTime = getFormattedTime()

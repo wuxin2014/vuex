@@ -18,6 +18,7 @@ export function createStore (options) {
 
 export class Store {
   constructor (options = {}) {
+    debugger
     if (__DEV__) {
       assert(typeof Promise !== 'undefined', `vuex requires a Promise polyfill in this browser.`)
       assert(this instanceof Store, `store must be called with the new operator.`)
@@ -61,23 +62,23 @@ export class Store {
     // strict mode
     this.strict = strict
 
-    const state = this._modules.root.state
+    const state = this._modules.root.state // 先获取根对象下的state状态
 
-    // init root module.
+    // init root module. 初始化安装module
     // this also recursively registers all sub-modules
     // and collects all module getters inside this._wrappedGetters
     installModule(this, state, [], this._modules.root)
 
     // initialize the store state, which is responsible for the reactivity
     // (also registers _wrappedGetters as computed properties)
-    resetStoreState(this, state)
+    resetStoreState(this, state) // 这个方法中注意 store.getter的赋值
 
     // apply plugins 插件的作用
     plugins.forEach(plugin => plugin(this))
   }
 
   install (app, injectKey) {
-    app.provide(injectKey || storeKey, this)
+    app.provide(injectKey || storeKey, this) // 注意install函数
     app.config.globalProperties.$store = this
 
     const useDevtools = this._devtools !== undefined
@@ -90,7 +91,7 @@ export class Store {
   }
 
   get state () {
-    return this._state.data
+    return this._state.data // 返回this._state.data
   }
 
   set state (v) {

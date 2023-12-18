@@ -34,6 +34,7 @@ export default {
   methods: {
     currency,
     checkout (products) {
+      debugger
       this.$store.dispatch('cart/checkout', products)
     }
   }

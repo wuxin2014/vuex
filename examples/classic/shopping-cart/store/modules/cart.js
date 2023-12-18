@@ -8,7 +8,7 @@ const state = () => ({
   checkoutStatus: null
 })
 
-// getters
+// getters使用不熟悉
 const getters = {
   cartProducts: (state, getters, rootState) => {
     return state.items.map(({ id, quantity }) => {
